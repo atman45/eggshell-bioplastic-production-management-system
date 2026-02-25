@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 100
+
+// Structure for Raw Materials
+struct RawMaterial {
+    float eggshell;
+    float starch;
+    float vinegar;
+    float glycerin;
+} stock;
+
+// Structure for Production Record
+struct Production {
+    int batchID;
+    float quantityProduced;
+} prod[MAX];
+
+int prodCount = 0;
+
+// Structure for Sales
+struct Sales {
+    int saleID;
+    float quantitySold;
+    float price;
+} sales[MAX];
+
+int saleCount = 0;
+
+void addRawMaterial() {
+    printf("\nEnter Eggshell Powder (kg): ");
+    scanf("%f", &stock.eggshell);
+
+    printf("Enter Starch (kg): ");
+    scanf("%f", &stock.starch);
+
+    printf("Enter Vinegar (liters): ");
+    scanf("%f", &stock.vinegar);
+
+    printf("Enter Glycerin (liters): ");
+    scanf("%f", &stock.glycerin);
+
+    printf("\nRaw Materials Updated Successfully!\n");
+}
+
+void viewRawMaterial() {
+    printf("\n---- Raw Material Stock ----\n");
+    printf("Eggshell Powder: %.2f kg\n", stock.eggshell);
+    printf("Starch: %.2f kg\n", stock.starch);
+    printf("Vinegar: %.2f liters\n", stock.vinegar);
+    printf("Glycerin: %.2f liters\n", stock.glycerin);
+}
+
+void produceBioplastic() {
+    float reqEgg, reqStarch, reqVinegar, reqGlycerin, quantity;
+
+    printf("\nEnter quantity to produce (kg): ");
+    scanf("%f", &quantity);
+
+    // Basic formula assumption
+    reqEgg = quantity * 0.3;
+    reqStarch = quantity * 0.4;
+    reqVinegar = quantity * 0.2;
+    reqGlycerin = quantity * 0.1;
+
+    if (stock.eggshell >= reqEgg &&
+        stock.starch >= reqStarch &&
+        stock.vinegar >= reqVinegar &&
+        stock.glycerin >= reqGlycerin) {
+
+        stock.eggshell -= reqEgg;
+        stock.starch -= reqStarch;
+        stock.vinegar -= reqVinegar;
+        stock.glycerin -= reqGlycerin;
+
+        prod[prodCount].batchID = prodCount + 1;
+        prod[prodCount].quantityProduced = quantity;
+        prodCount++;
+
+        printf("\nBioplastic Batch Produced Successfully!\n");
+    } else {
+        printf("\nInsufficient Raw Materials!\n");
+    }
+}
+
+void viewProduction() {
+    printf("\n---- Production Records ----\n");
+    for (int i = 0; i < prodCount; i++) {
+        printf("Batch ID: %d | Quantity: %.2f kg\n",
+               prod[i].batchID,
+               prod[i].quantityProduced);
+    }
+}
+
+void recordSales() {
+    printf("\nEnter quantity sold (kg): ");
+    scanf("%f", &sales[saleCount].quantitySold);
+
+    printf("Enter price per kg: ");
+    scanf("%f", &sales[saleCount].price);
+
+    sales[saleCount].saleID = saleCount + 1;
+    saleCount++;
+
+    printf("\nSale Recorded Successfully!\n");
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\n===== Eggshell Bioplastic Production Management =====\n");
+        printf("1. Add Raw Materials\n");
+        printf("2. View Raw Materials\n");
+        printf("3. Produce Bioplastic Batch\n");
+        printf("4. View Production Records\n");
+        printf("5. Record Sales\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1: addRawMaterial(); break;
+            case 2: viewRawMaterial(); break;
+            case 3: produceBioplastic(); break;
+            case 4: viewProduction(); break;
+            case 5: recordSales(); break;
+            case 6: exit(0);
+            default: printf("\nInvalid Choice!\n");
+        }
+    }
+
+    return 0;
+}
